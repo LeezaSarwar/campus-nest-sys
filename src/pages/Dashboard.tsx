@@ -66,18 +66,19 @@ const Dashboard = () => {
       { icon: ClipboardCheck, label: "Attendance", path: "/attendance" },
       { icon: FileText, label: "Leaves", path: "/leaves" },
       { icon: Calendar, label: "Timetable", path: "/timetable" },
+      { icon: Bell, label: "Announcements", path: "/announcements" },
     ];
 
     if (isAdmin) {
       return [
         ...commonItems.slice(0, 1),
+        { icon: Users, label: "All Students", path: "/students" },
         { icon: Users, label: "Add Student", path: "/add-student" },
         { icon: BookOpen, label: "Classes", path: "/dashboard" },
         ...commonItems.slice(1),
         { icon: BarChart3, label: "Results", path: "/dashboard" },
         { icon: CreditCard, label: "Fees", path: "/dashboard" },
         { icon: Upload, label: "Materials", path: "/dashboard" },
-        { icon: Bell, label: "Notifications", path: "/dashboard" },
       ];
     }
 
@@ -100,12 +101,12 @@ const Dashboard = () => {
   const getQuickActions = () => {
     if (isAdmin) {
       return [
-        { icon: Users, label: "Add Student", color: "gradient-primary", path: "/add-student" },
-        { icon: ClipboardCheck, label: "Attendance", color: "bg-success", path: "/attendance" },
-        { icon: FileText, label: "Leaves", color: "bg-accent", path: "/leaves" },
-        { icon: Calendar, label: "Timetable", color: "bg-destructive", path: "/timetable" },
-        { icon: Upload, label: "Upload Material", color: "gradient-primary", path: "/dashboard" },
-        { icon: Bell, label: "Send Notice", color: "bg-success", path: "/dashboard" },
+        { icon: Users, label: "All Students", color: "gradient-primary", path: "/students" },
+        { icon: Users, label: "Add Student", color: "bg-success", path: "/add-student" },
+        { icon: ClipboardCheck, label: "Attendance", color: "bg-accent", path: "/attendance" },
+        { icon: FileText, label: "Leaves", color: "bg-destructive", path: "/leaves" },
+        { icon: Calendar, label: "Timetable", color: "gradient-primary", path: "/timetable" },
+        { icon: Bell, label: "Announcements", color: "bg-success", path: "/announcements" },
       ];
     }
 
@@ -114,7 +115,7 @@ const Dashboard = () => {
         { icon: ClipboardCheck, label: "Add Attendance", color: "gradient-primary", path: "/attendance" },
         { icon: FileText, label: "Leave Requests", color: "bg-accent", path: "/leaves" },
         { icon: Calendar, label: "Timetable", color: "bg-success", path: "/timetable" },
-        { icon: Upload, label: "Upload Material", color: "bg-destructive", path: "/dashboard" },
+        { icon: Bell, label: "Announcements", color: "bg-destructive", path: "/announcements" },
       ];
     }
 
@@ -123,6 +124,7 @@ const Dashboard = () => {
       { icon: ClipboardCheck, label: "My Attendance", color: "gradient-primary", path: "/attendance" },
       { icon: FileText, label: "Request Leave", color: "bg-accent", path: "/leaves" },
       { icon: Calendar, label: "Timetable", color: "bg-success", path: "/timetable" },
+      { icon: Bell, label: "Announcements", color: "bg-destructive", path: "/announcements" },
     ];
   };
 
