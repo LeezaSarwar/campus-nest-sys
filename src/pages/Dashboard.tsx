@@ -59,16 +59,16 @@ const Dashboard = () => {
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
 
   const menuItems = [
-    { icon: Home, label: "Dashboard", active: true },
-    { icon: Users, label: "Users" },
-    { icon: BookOpen, label: "Classes" },
-    { icon: ClipboardCheck, label: "Attendance" },
-    { icon: FileText, label: "Exams" },
-    { icon: BarChart3, label: "Results" },
-    { icon: CreditCard, label: "Fees" },
-    { icon: Upload, label: "Materials" },
-    { icon: Calendar, label: "Timetable" },
-    { icon: Bell, label: "Notifications" },
+    { icon: Home, label: "Dashboard", active: true, path: "/dashboard" },
+    { icon: Users, label: "Users", path: "/dashboard" },
+    { icon: BookOpen, label: "Classes", path: "/dashboard" },
+    { icon: ClipboardCheck, label: "Attendance", path: "/dashboard" },
+    { icon: FileText, label: "Exams", path: "/dashboard" },
+    { icon: BarChart3, label: "Results", path: "/dashboard" },
+    { icon: CreditCard, label: "Fees", path: "/dashboard" },
+    { icon: Upload, label: "Materials", path: "/dashboard" },
+    { icon: Calendar, label: "Timetable", path: "/timetable" },
+    { icon: Bell, label: "Notifications", path: "/dashboard" },
   ];
 
   const stats = [
@@ -119,6 +119,7 @@ const Dashboard = () => {
             {menuItems.map((item, index) => (
               <button
                 key={index}
+                onClick={() => navigate(item.path)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
                   item.active
                     ? "bg-primary text-primary-foreground"
