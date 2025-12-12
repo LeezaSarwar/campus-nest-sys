@@ -89,6 +89,7 @@ export type Database = {
           end_date: string
           id: string
           reason: string
+          sent_to: string
           start_date: string
           status: string
           student_id: string
@@ -100,6 +101,7 @@ export type Database = {
           end_date: string
           id?: string
           reason: string
+          sent_to?: string
           start_date: string
           status?: string
           student_id: string
@@ -111,6 +113,7 @@ export type Database = {
           end_date?: string
           id?: string
           reason?: string
+          sent_to?: string
           start_date?: string
           status?: string
           student_id?: string
