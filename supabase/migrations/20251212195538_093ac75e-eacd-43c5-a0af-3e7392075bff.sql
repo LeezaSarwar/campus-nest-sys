@@ -1,0 +1,2 @@
+-- Add sent_to column to leaves table to track whether leave is sent to teacher or admin
+ALTER TABLE public.leaves ADD COLUMN sent_to text NOT NULL DEFAULT 'admin' CHECK (sent_to IN ('teacher', 'admin'));

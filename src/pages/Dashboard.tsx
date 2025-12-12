@@ -22,12 +22,14 @@ import {
   Clock
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { role, isAdmin, isTeacher, isStudent } = useUserRole();
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -55,27 +57,86 @@ const Dashboard = () => {
     navigate("/auth");
   };
 
-  const userRole = (user?.user_metadata?.role as string) || "student";
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
 
-  const menuItems = [
-    { icon: Home, label: "Dashboard", active: true, path: "/dashboard" },
-    { icon: Users, label: "Add Student", path: "/add-student" },
-    { icon: BookOpen, label: "Classes", path: "/dashboard" },
-    { icon: ClipboardCheck, label: "Attendance", path: "/attendance" },
-    { icon: FileText, label: "Leaves", path: "/leaves" },
-    { icon: BarChart3, label: "Results", path: "/dashboard" },
-    { icon: CreditCard, label: "Fees", path: "/dashboard" },
-    { icon: Upload, label: "Materials", path: "/dashboard" },
-    { icon: Calendar, label: "Timetable", path: "/timetable" },
-    { icon: Bell, label: "Notifications", path: "/dashboard" },
-  ];
+  // Build menu items based on role
+  const getMenuItems = () => {
+    const commonItems = [
+      { icon: Home, label: "Dashboard", active: true, path: "/dashboard" },
+      { icon: ClipboardCheck, label: "Attendance", path: "/attendance" },
+      { icon: FileText, label: "Leaves", path: "/leaves" },
+      { icon: Calendar, label: "Timetable", path: "/timetable" },
+    ];
 
-  const stats = [
+    if (isAdmin) {
+      return [
+        ...commonItems.slice(0, 1),
+        { icon: Users, label: "Add Student", path: "/add-student" },
+        { icon: BookOpen, label: "Classes", path: "/dashboard" },
+        ...commonItems.slice(1),
+        { icon: BarChart3, label: "Results", path: "/dashboard" },
+        { icon: CreditCard, label: "Fees", path: "/dashboard" },
+        { icon: Upload, label: "Materials", path: "/dashboard" },
+        { icon: Bell, label: "Notifications", path: "/dashboard" },
+      ];
+    }
+
+    if (isTeacher) {
+      return [
+        ...commonItems,
+        { icon: BookOpen, label: "Classes", path: "/dashboard" },
+        { icon: BarChart3, label: "Results", path: "/dashboard" },
+        { icon: Upload, label: "Materials", path: "/dashboard" },
+      ];
+    }
+
+    // Student
+    return commonItems;
+  };
+
+  const menuItems = getMenuItems();
+
+  // Build quick actions based on role
+  const getQuickActions = () => {
+    if (isAdmin) {
+      return [
+        { icon: Users, label: "Add Student", color: "gradient-primary", path: "/add-student" },
+        { icon: ClipboardCheck, label: "Attendance", color: "bg-success", path: "/attendance" },
+        { icon: FileText, label: "Leaves", color: "bg-accent", path: "/leaves" },
+        { icon: Calendar, label: "Timetable", color: "bg-destructive", path: "/timetable" },
+        { icon: Upload, label: "Upload Material", color: "gradient-primary", path: "/dashboard" },
+        { icon: Bell, label: "Send Notice", color: "bg-success", path: "/dashboard" },
+      ];
+    }
+
+    if (isTeacher) {
+      return [
+        { icon: ClipboardCheck, label: "Add Attendance", color: "gradient-primary", path: "/attendance" },
+        { icon: FileText, label: "Leave Requests", color: "bg-accent", path: "/leaves" },
+        { icon: Calendar, label: "Timetable", color: "bg-success", path: "/timetable" },
+        { icon: Upload, label: "Upload Material", color: "bg-destructive", path: "/dashboard" },
+      ];
+    }
+
+    // Student
+    return [
+      { icon: ClipboardCheck, label: "My Attendance", color: "gradient-primary", path: "/attendance" },
+      { icon: FileText, label: "Request Leave", color: "bg-accent", path: "/leaves" },
+      { icon: Calendar, label: "Timetable", color: "bg-success", path: "/timetable" },
+    ];
+  };
+
+  const quickActions = getQuickActions();
+
+  const stats = isStudent ? [
+    { label: "Present Days", value: "45", change: "+3", icon: ClipboardCheck, color: "bg-success" },
+    { label: "Absent Days", value: "2", change: "0", icon: ClipboardCheck, color: "bg-destructive" },
+    { label: "Leave Requests", value: "3", change: "+1", icon: FileText, color: "bg-accent" },
+  ] : [
     { label: "Total Students", value: "2,456", change: "+12%", icon: Users, color: "bg-primary" },
     { label: "Active Classes", value: "48", change: "+5", icon: BookOpen, color: "bg-success" },
     { label: "Attendance Rate", value: "94.5%", change: "+2.3%", icon: ClipboardCheck, color: "bg-accent" },
-    { label: "Pending Fees", value: "$12,450", change: "-8%", icon: CreditCard, color: "bg-destructive" },
+    { label: "Pending Leaves", value: "12", change: "+3", icon: FileText, color: "bg-destructive" },
   ];
 
   const recentActivities = [
@@ -140,7 +201,7 @@ const Dashboard = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="font-medium truncate">{userName}</div>
-                <div className="text-xs text-muted-foreground capitalize">{userRole}</div>
+                <div className="text-xs text-muted-foreground capitalize">{role || "user"}</div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -194,14 +255,14 @@ const Dashboard = () => {
         {/* Dashboard Content */}
         <div className="p-4 lg:p-8 space-y-8">
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className={`grid grid-cols-1 sm:grid-cols-2 ${isStudent ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-6`}>
             {stats.map((stat, index) => (
               <div key={index} className="bg-card p-6 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
                   <div className={`w-12 h-12 rounded-xl ${stat.color} flex items-center justify-center`}>
                     <stat.icon className="w-6 h-6 text-primary-foreground" />
                   </div>
-                  <span className={`text-sm font-medium ${stat.change.startsWith("+") ? "text-success" : "text-destructive"}`}>
+                  <span className={`text-sm font-medium ${stat.change.startsWith("+") ? "text-success" : stat.change === "0" ? "text-muted-foreground" : "text-destructive"}`}>
                     {stat.change}
                   </span>
                 </div>
@@ -261,15 +322,8 @@ const Dashboard = () => {
           {/* Quick Actions */}
           <div className="bg-card rounded-2xl border border-border p-6">
             <h3 className="text-lg font-semibold mb-6">Quick Actions</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {[
-                { icon: Users, label: "Add Student", color: "gradient-primary", path: "/add-student" },
-                { icon: ClipboardCheck, label: "Attendance", color: "bg-success", path: "/attendance" },
-                { icon: FileText, label: "Leaves", color: "bg-accent", path: "/leaves" },
-                { icon: Calendar, label: "Timetable", color: "bg-destructive", path: "/timetable" },
-                { icon: Upload, label: "Upload Material", color: "gradient-primary", path: "/dashboard" },
-                { icon: Bell, label: "Send Notice", color: "bg-success", path: "/dashboard" },
-              ].map((action, index) => (
+            <div className={`grid grid-cols-2 sm:grid-cols-3 ${quickActions.length > 4 ? 'lg:grid-cols-6' : 'lg:grid-cols-4'} gap-4`}>
+              {quickActions.map((action, index) => (
                 <button
                   key={index}
                   onClick={() => navigate(action.path)}

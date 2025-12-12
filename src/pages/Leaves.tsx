@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -21,6 +22,7 @@ interface LeaveRequest {
   end_date: string;
   reason: string;
   status: "pending" | "approved" | "rejected";
+  sent_to: "teacher" | "admin";
   created_at: string;
   student_name?: string;
 }
@@ -36,24 +38,35 @@ const Leaves = () => {
     startDate: "",
     endDate: "",
     reason: "",
+    sentTo: "admin" as "teacher" | "admin",
   });
 
-  const isTeacherOrAdmin = role === "teacher" || role === "admin";
+  const isTeacher = role === "teacher";
+  const isAdmin = role === "admin";
+  const isTeacherOrAdmin = isTeacher || isAdmin;
 
   useEffect(() => {
     if (!roleLoading) {
       fetchLeaves();
     }
-  }, [roleLoading, userId]);
+  }, [roleLoading, userId, role]);
 
   const fetchLeaves = async () => {
     setLoading(true);
     try {
       let query = supabase.from("leaves").select("*").order("created_at", { ascending: false });
 
-      // Students can only see their own leaves
+      // Students see only their own leaves
       if (role === "student" && userId) {
         query = query.eq("student_id", userId);
+      }
+      // Teachers see only leaves sent to them
+      else if (isTeacher) {
+        query = query.eq("sent_to", "teacher");
+      }
+      // Admins see only leaves sent to them
+      else if (isAdmin) {
+        query = query.eq("sent_to", "admin");
       }
 
       const { data } = await query;
@@ -75,6 +88,7 @@ const Leaves = () => {
           data.map((l) => ({
             ...l,
             status: l.status as "pending" | "approved" | "rejected",
+            sent_to: (l.sent_to || "admin") as "teacher" | "admin",
             student_name: profileMap[l.student_id] || "Unknown",
           }))
         );
@@ -98,17 +112,18 @@ const Leaves = () => {
         end_date: formData.endDate,
         reason: formData.reason,
         status: "pending",
+        sent_to: formData.sentTo,
       });
 
       if (error) throw error;
 
       toast({
         title: "Leave request submitted",
-        description: "Your leave request has been submitted for approval.",
+        description: `Your leave request has been sent to ${formData.sentTo} for approval.`,
       });
 
       setDialogOpen(false);
-      setFormData({ startDate: "", endDate: "", reason: "" });
+      setFormData({ startDate: "", endDate: "", reason: "", sentTo: "admin" });
       fetchLeaves();
     } catch (error: any) {
       toast({
@@ -181,7 +196,14 @@ const Leaves = () => {
                 <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center">
                   <FileText className="w-6 h-6 text-primary-foreground" />
                 </div>
-                <CardTitle className="text-2xl">Leave Management</CardTitle>
+                <div>
+                  <CardTitle className="text-2xl">Leave Management</CardTitle>
+                  {isTeacherOrAdmin && (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Showing leaves sent to {isAdmin ? "Admin" : "Teacher"}
+                    </p>
+                  )}
+                </div>
               </div>
               {role === "student" && (
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -235,6 +257,25 @@ const Leaves = () => {
                           rows={4}
                         />
                       </div>
+                      <div className="space-y-3">
+                        <Label>Send Request To</Label>
+                        <RadioGroup
+                          value={formData.sentTo}
+                          onValueChange={(value) =>
+                            setFormData({ ...formData, sentTo: value as "teacher" | "admin" })
+                          }
+                          className="flex gap-6"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="teacher" id="teacher" />
+                            <Label htmlFor="teacher" className="cursor-pointer">Send to Teacher</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="admin" id="admin" />
+                            <Label htmlFor="admin" className="cursor-pointer">Send to Admin</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
                       <Button type="submit" className="w-full" disabled={submitting}>
                         {submitting ? "Submitting..." : "Submit Request"}
                       </Button>
@@ -254,6 +295,7 @@ const Leaves = () => {
                       <TableHead>Start Date</TableHead>
                       <TableHead>End Date</TableHead>
                       <TableHead>Reason</TableHead>
+                      {role === "student" && <TableHead>Sent To</TableHead>}
                       <TableHead>Status</TableHead>
                       {isTeacherOrAdmin && <TableHead>Actions</TableHead>}
                     </TableRow>
@@ -267,6 +309,13 @@ const Leaves = () => {
                         <TableCell>{format(new Date(leave.start_date), "MMM d, yyyy")}</TableCell>
                         <TableCell>{format(new Date(leave.end_date), "MMM d, yyyy")}</TableCell>
                         <TableCell className="max-w-xs truncate">{leave.reason}</TableCell>
+                        {role === "student" && (
+                          <TableCell>
+                            <Badge variant="outline" className="capitalize">
+                              {leave.sent_to}
+                            </Badge>
+                          </TableCell>
+                        )}
                         <TableCell>
                           <Badge variant={getStatusBadge(leave.status).variant}>
                             {getStatusBadge(leave.status).label}
