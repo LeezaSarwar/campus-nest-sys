@@ -60,10 +60,10 @@ const Dashboard = () => {
 
   const menuItems = [
     { icon: Home, label: "Dashboard", active: true, path: "/dashboard" },
-    { icon: Users, label: "Users", path: "/dashboard" },
+    { icon: Users, label: "Add Student", path: "/add-student" },
     { icon: BookOpen, label: "Classes", path: "/dashboard" },
-    { icon: ClipboardCheck, label: "Attendance", path: "/dashboard" },
-    { icon: FileText, label: "Exams", path: "/dashboard" },
+    { icon: ClipboardCheck, label: "Attendance", path: "/attendance" },
+    { icon: FileText, label: "Leaves", path: "/leaves" },
     { icon: BarChart3, label: "Results", path: "/dashboard" },
     { icon: CreditCard, label: "Fees", path: "/dashboard" },
     { icon: Upload, label: "Materials", path: "/dashboard" },
@@ -263,15 +263,16 @@ const Dashboard = () => {
             <h3 className="text-lg font-semibold mb-6">Quick Actions</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
-                { icon: Users, label: "Add Student", color: "gradient-primary" },
-                { icon: BookOpen, label: "Create Class", color: "bg-success" },
-                { icon: FileText, label: "New Exam", color: "bg-accent" },
-                { icon: CreditCard, label: "Record Fee", color: "bg-destructive" },
-                { icon: Upload, label: "Upload Material", color: "gradient-primary" },
-                { icon: Bell, label: "Send Notice", color: "bg-success" },
+                { icon: Users, label: "Add Student", color: "gradient-primary", path: "/add-student" },
+                { icon: ClipboardCheck, label: "Attendance", color: "bg-success", path: "/attendance" },
+                { icon: FileText, label: "Leaves", color: "bg-accent", path: "/leaves" },
+                { icon: Calendar, label: "Timetable", color: "bg-destructive", path: "/timetable" },
+                { icon: Upload, label: "Upload Material", color: "gradient-primary", path: "/dashboard" },
+                { icon: Bell, label: "Send Notice", color: "bg-success", path: "/dashboard" },
               ].map((action, index) => (
                 <button
                   key={index}
+                  onClick={() => navigate(action.path)}
                   className="flex flex-col items-center gap-3 p-4 rounded-xl border border-border hover:border-primary/50 hover:shadow-md transition-all group"
                 >
                   <div className={`w-12 h-12 rounded-xl ${action.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
