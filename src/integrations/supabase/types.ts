@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance: {
+        Row: {
+          class_id: string | null
+          created_at: string | null
+          date: string
+          id: string
+          marked_by: string | null
+          notes: string | null
+          status: string
+          student_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          class_id?: string | null
+          created_at?: string | null
+          date: string
+          id?: string
+          marked_by?: string | null
+          notes?: string | null
+          status: string
+          student_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          class_id?: string | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          marked_by?: string | null
+          notes?: string | null
+          status?: string
+          student_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       classes: {
         Row: {
           created_at: string | null
@@ -35,6 +79,42 @@ export type Database = {
           id?: string
           name?: string
           section?: string | null
+        }
+        Relationships: []
+      }
+      leaves: {
+        Row: {
+          approved_by: string | null
+          created_at: string | null
+          end_date: string
+          id: string
+          reason: string
+          start_date: string
+          status: string
+          student_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          approved_by?: string | null
+          created_at?: string | null
+          end_date: string
+          id?: string
+          reason: string
+          start_date: string
+          status?: string
+          student_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          approved_by?: string | null
+          created_at?: string | null
+          end_date?: string
+          id?: string
+          reason?: string
+          start_date?: string
+          status?: string
+          student_id?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
