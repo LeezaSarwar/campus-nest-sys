@@ -88,17 +88,32 @@ const Timetable = () => {
           id,
           class_id,
           subject_id,
+          teacher_id,
           day_of_week,
           start_time,
           end_time,
           room,
           subject:subjects(name, code),
-          teacher:profiles!timetable_entries_teacher_id_fkey(full_name, email),
           class:classes(name, section)
         `)
         .eq("class_id", selectedClass)
         .order("day_of_week")
         .order("start_time");
+
+      // Fetch teacher profiles separately if there are entries with teacher_id
+      const teacherIds = (data || []).map((e: any) => e.teacher_id).filter(Boolean);
+      let teacherMap: Record<string, { full_name: string | null; email: string | null }> = {};
+      
+      if (teacherIds.length > 0) {
+        const { data: teachers } = await supabase
+          .from("profiles")
+          .select("user_id, full_name, email")
+          .in("user_id", teacherIds);
+        
+        (teachers || []).forEach((t: any) => {
+          teacherMap[t.user_id] = { full_name: t.full_name, email: t.email };
+        });
+      }
 
       if (error) throw error;
       
@@ -106,7 +121,7 @@ const Timetable = () => {
       const transformedData = (data || []).map((entry: any) => ({
         ...entry,
         subject: entry.subject,
-        teacher: entry.teacher,
+        teacher: entry.teacher_id ? teacherMap[entry.teacher_id] || null : null,
         class: entry.class,
       }));
       
