@@ -59,37 +59,19 @@ const Timetable = () => {
 
   useEffect(() => {
     const fetchClasses = async () => {
-      // For students, fetch only their enrolled class
-      if (role === "student" && user) {
-        const { data: studentClass } = await supabase
-          .from("student_classes")
-          .select("class_id, class:classes(id, name, section)")
-          .eq("student_id", user.id)
-          .single();
+      const { data, error } = await supabase
+        .from("classes")
+        .select("id, name, section")
+        .order("grade_level", { ascending: false });
 
-        if (studentClass?.class) {
-          const classData = studentClass.class as { id: string; name: string; section: string | null };
-          setClasses([classData]);
-          setSelectedClass(classData.id);
-        }
-      } else {
-        // For teachers/admins, fetch all classes
-        const { data } = await supabase
-          .from("classes")
-          .select("id, name, section")
-          .order("grade_level", { ascending: false });
-
-        if (data && data.length > 0) {
-          setClasses(data);
-          setSelectedClass(data[0].id);
-        }
+      if (data && data.length > 0) {
+        setClasses(data);
+        setSelectedClass(data[0].id);
       }
     };
 
-    if (!authLoading && user) {
-      fetchClasses();
-    }
-  }, [authLoading, user, role]);
+    fetchClasses();
+  }, []);
 
   useEffect(() => {
     if (selectedClass) {
@@ -228,23 +210,20 @@ const Timetable = () => {
             </p>
           </div>
 
-          {/* Only show class selector if user has multiple classes or is teacher/admin */}
-          {(isTeacher || classes.length > 1) && (
-            <div className="w-full sm:w-64">
-              <Select value={selectedClass} onValueChange={setSelectedClass}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select class" />
-                </SelectTrigger>
-                <SelectContent>
-                  {classes.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {c.name} {c.section && `- ${c.section}`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+          <div className="w-full sm:w-64">
+            <Select value={selectedClass} onValueChange={setSelectedClass}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select class" />
+              </SelectTrigger>
+              <SelectContent>
+                {classes.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.name} {c.section && `- ${c.section}`}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Timetable Grid */}
