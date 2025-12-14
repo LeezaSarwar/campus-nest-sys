@@ -11,15 +11,15 @@ A dynamic web application designed to streamline school administration and enhan
 
 ## Key Features:
 
-Student management and attendance tracking
+**Student management and attendance tracking**
 
-Timetable creation and access
+**Timetable creation and access**
 
-Leave request, approval, and live notifications
+**Leave request, approval, and live notifications**
 
-Admin announcements for students
+**Admin announcements for students**
 
-Real-time dashboard and system analytics
+**Real-time dashboard and system analytics**
 
 ---
 
