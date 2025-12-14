@@ -5,11 +5,11 @@
 **Project Name:** SchoolManagementSystem 
 **Live URL:** https://schoolmanagementsystem-phi.vercel.app//
 
-##School Management System
+## School Management System
 
 A dynamic web application designed to streamline school administration and enhance student management. The app allows admin to manage students, timetables, leaves, and announcements, while students can track attendance, request leaves, and view updates in real-time. Built with full stack web development principles, the system ensures a user-friendly interface and live data synchronization for an efficient educational workflow.
 
-##Key Features:
+## Key Features:
 
 Student management and attendance tracking
 
