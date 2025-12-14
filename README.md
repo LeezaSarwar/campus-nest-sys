@@ -3,7 +3,7 @@
 ## Project Info
 
 **Project Name:** School Management System  
-**Live App URL:** <ADD_YOUR_LIVE_APP_URL_HERE>
+**Live App URL:** <https://schoolmanagementsystem-phi.vercel.app/>
 
 This School Management App is designed to manage students, classes, timetables, attendance, and announcements efficiently. It provides separate access for admin and students, ensuring smooth academic management and communication.
 
