@@ -98,7 +98,7 @@ const Index = () => {
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-slide-up">
               Modern School
-              <span className="text-gradient block">Management System</span>
+              <span className="text- block">Management System</span>
             </h1>
             
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: "0.1s" }}>
