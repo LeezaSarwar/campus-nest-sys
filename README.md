@@ -1,73 +1,98 @@
-# Welcome to your Lovable project
+# Welcome to School Management App
 
-## Project info
+## Project Info
 
-**URL**: https://lovable.dev/projects/c9d6312b-e5a8-4001-8faf-e90f922fd1f3
+**Project Name:** School Management System  
+**Live App URL:** <ADD_YOUR_LIVE_APP_URL_HERE>
+
+This School Management App is designed to manage students, classes, timetables, attendance, and announcements efficiently. It provides separate access for admin and students, ensuring smooth academic management and communication.
+
+---
 
 ## How can I edit this code?
 
-There are several ways of editing your application.
+You can edit and manage this project in multiple ways:
 
-**Use Lovable**
+### Use Your Preferred IDE (Local Development)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c9d6312b-e5a8-4001-8faf-e90f922fd1f3) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+If you want to work locally using your own IDE, follow these steps:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Step 1: Clone the repository
+git clone <YOUR_GITHUB_REPO_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Step 2: Navigate to the project directory
+cd school-management-app
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
 ```
+Make sure Node.js and npm are installed on your system.
+Install Node.js using nvm: https://github.com/nvm-sh/nvm#installing-and-updating
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Edit Files Directly on GitHub
 
-**Use GitHub Codespaces**
+- Open your repository on GitHub
+- Navigate to the file you want to edit
+- Click the **Edit (✏️)** button
+- Make changes and commit them
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Changes pushed to GitHub will automatically deploy on Vercel (if connected).
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+### Use GitHub Codespaces
 
+- Go to your GitHub repository
+- Click the **Code** button
+- Open the **Codespaces** tab
+- Click **New Codespace**
+- Edit files, then commit and push your changes
+
+---
+
+## Technologies Used
+
+This project is built using the following technologies:
+
+- Bun
 - Vite
 - TypeScript
 - React
-- shadcn-ui
 - Tailwind CSS
+- shadcn/ui
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/c9d6312b-e5a8-4001-8faf-e90f922fd1f3) and click on Share -> Publish.
+## Deployment
 
-## Can I connect a custom domain to my Lovable project?
+The project is deployed using **Vercel**.
 
-Yes, you can!
+Whenever you push changes to the connected GitHub repository, Vercel automatically builds and deploys the latest version.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Custom Domain
+
+You can connect a custom domain to this project using the Vercel dashboard.
+
+Steps:
+- Go to your Vercel Project
+- Open **Settings > Domains**
+- Add and configure your custom domain
+
+---
+
+## Author
+
+**Built with ❤️ by Leeza Sarwar**
+
+- LinkedIn: https://www.linkedin.com/in/leeza-sarwar/
+- GitHub: https://github.com/LeezaSarwar
+- Portfolio: https://leezaportfolio.vercel.app/
+
